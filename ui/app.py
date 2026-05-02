@@ -711,8 +711,6 @@ div[data-testid="stPopoverBody"] button p { margin: 0 !important; width: 100%; f
   border-radius: 16px !important;
   box-shadow: 0 12px 32px rgba(124,58,237,.08), 0 0 0 1px rgba(124,58,237,.04) !important;
   padding: 4px 6px 4px 12px !important;
-  position: relative !important;
-  overflow: hidden !important;
 }
 [data-testid="stChatInput"] > div {
   display: flex !important;
@@ -720,10 +718,6 @@ div[data-testid="stPopoverBody"] button p { margin: 0 !important; width: 100%; f
   gap: 6px !important;
   padding: 0 !important;
   margin: 0 !important;
-}
-/* Inset button wrapper so border-radius doesn't clip the circle */
-[data-testid="stChatInput"] > div > div:last-child {
-  right: 6px !important;
 }
 [data-testid="stChatInput"] textarea {
   font-size: 14px !important;
