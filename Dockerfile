@@ -24,11 +24,19 @@ EXPOSE 7860
 # Create log directory
 RUN mkdir -p /var/log/supervisor
 
-# Create startup script that generates .env at runtime
-RUN echo '#!/bin/bash\n\
+# Create startup script
+RUN printf '#!/bin/bash\n\
+set -e\n\
+\n\
+# Create .env file with runtime environment variables\n\
 echo "GROQ_API_KEY=${GROQ_API_KEY}" > /app/.env\n\
 echo "DEMO_MODE=true" >> /app/.env\n\
-exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf\n\
+\n\
+echo "Starting services..."\n\
+echo "GROQ_API_KEY is set: $([ -n "${GROQ_API_KEY}" ] && echo "YES" || echo "NO")"\n\
+\n\
+# Start supervisor in foreground\n\
+exec /usr/bin/supervisord -n -c /etc/supervisor/conf.d/supervisord.conf\n\
 ' > /start.sh && chmod +x /start.sh
 
 # Start with the startup script
