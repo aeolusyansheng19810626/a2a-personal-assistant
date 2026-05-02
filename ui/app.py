@@ -710,22 +710,35 @@ div[data-testid="stPopoverBody"] button p { margin: 0 !important; width: 100%; f
   border: 1px solid var(--line-2) !important;
   border-radius: 16px !important;
   box-shadow: 0 12px 32px rgba(124,58,237,.08), 0 0 0 1px rgba(124,58,237,.04) !important;
-  padding: 6px 8px !important;
+  padding: 4px 4px 4px 12px !important;
+  overflow: hidden !important;
 }
-[data-testid="stChatInput"] textarea { font-size: 14px !important; color: var(--fg) !important; }
-/* Chat submit button - circular send button (works both inside & outside input box) */
+/* Inner flex row that holds textarea + button (Streamlit >= 1.30 structure) */
+[data-testid="stChatInput"] > div {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+[data-testid="stChatInput"] textarea {
+  font-size: 14px !important;
+  color: var(--fg) !important;
+  padding: 8px 0 !important;
+}
+/* Chat submit button - circle, sits at right edge inside the container */
 [data-testid="stChatInputSubmitButton"],
 [data-testid="stChatInputSubmitButton"] button {
   background: linear-gradient(135deg, #4F46E5, #7C3AED) !important;
   border-radius: 50% !important;
   border: none !important;
-  width: 42px !important; height: 42px !important;
-  min-width: 42px !important; min-height: 42px !important;
-  max-width: 42px !important; max-height: 42px !important;
+  width: 36px !important; height: 36px !important;
+  min-width: 36px !important; min-height: 36px !important;
+  max-width: 36px !important; max-height: 36px !important;
   padding: 0 !important;
   display: flex !important; align-items: center !important; justify-content: center !important;
-  box-shadow: 0 4px 14px rgba(124,58,237,.4) !important;
   cursor: pointer !important;
+  flex-shrink: 0 !important;
   align-self: center !important;
 }
 [data-testid="stChatInputSubmitButton"] svg { fill: white !important; width: 16px !important; height: 16px !important; }
