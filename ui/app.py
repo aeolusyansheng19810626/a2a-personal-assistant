@@ -710,8 +710,7 @@ div[data-testid="stPopoverBody"] button p { margin: 0 !important; width: 100%; f
   border: 1px solid var(--line-2) !important;
   border-radius: 16px !important;
   box-shadow: 0 12px 32px rgba(124,58,237,.08), 0 0 0 1px rgba(124,58,237,.04) !important;
-  padding: 4px 4px 4px 12px !important;
-  overflow: hidden !important;
+  padding: 4px 6px 4px 12px !important;
 }
 /* Inner flex row that holds textarea + button (Streamlit >= 1.30 structure) */
 [data-testid="stChatInput"] > div {
