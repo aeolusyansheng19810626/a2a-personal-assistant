@@ -59,6 +59,7 @@ i18n = {
         "chat_input_placeholder": "询问关于邮件、日历或任务的任何问题...",
         "agent_label": "代理",
         "skill_label": "技能",
+        "demo_mode": "演示模式",
     },
     "ja": {
         "title": "A2A（Agent To Agent）ﾊﾟｰｿﾅﾙｱｼｽﾀﾝﾄ",
@@ -90,6 +91,7 @@ i18n = {
         "chat_input_placeholder": "ﾒｰﾙ、ｶﾚﾝﾀﾞｰ、ﾀｽｸについてのご質問...",
         "agent_label": "ｴｰｼﾞｪﾝﾄ",
         "skill_label": "ｽｷﾙ",
+        "demo_mode": "ﾃﾞﾓﾓｰﾄﾞ",
     },
     "en": {
         "title": "A2A (Agent To Agent) Personal Assistant",
@@ -122,6 +124,7 @@ i18n = {
         "chat_input_placeholder": "Ask any question about email, calendar, or tasks...",
         "agent_label": "Agent",
         "skill_label": "Skill",
+        "demo_mode": "Demo Mode",
     }
 }
 
@@ -782,7 +785,7 @@ if "agents_cache" not in st.session_state:
 
 # Topbar
 agent_count = len(st.session_state.agents_cache)
-demo_pill_html = '<div class="status demo-pill">🎬 演示模式</div>' if DEMO_MODE else ""
+demo_pill_html = f'<div class="status demo-pill">🎬 {t("demo_mode")}</div>' if DEMO_MODE else ""
 
 topbar_html = f"<div class='topbar-wrapper'><div class='topbar'><div class='topbar-left'><div class='page-title'>{t('title')}</div><div class='page-sub'>{t('subtitle')}</div></div><div class='topbar-right'>" + demo_pill_html + "<div id='lang-switcher-anchor'></div></div></div></div></div>"
 st.markdown(topbar_html, unsafe_allow_html=True)
