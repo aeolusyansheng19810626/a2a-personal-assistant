@@ -2,6 +2,21 @@
 
 基于 A2A（Agent-to-Agent）协议的多智能体个人助手系统。五个独立服务通过 A2A 协议通信，处理邮件、日历和任务管理。
 
+## 🎭 演示模式
+
+本项目支持两种运行模式：
+
+### 生产模式（main 分支）
+- 需要 Google OAuth 凭证（`credentials.json`）
+- 真实的 Gmail 和 Calendar API 调用
+- 适合个人使用
+
+### 演示模式（demo 分支）
+- **无需 Google API 配置**
+- 使用硬编码的模拟数据
+- 适合快速体验和演示
+- 🚀 **已部署到 HuggingFace Spaces**
+
 ## 系统架构
 
 ### 核心组件
@@ -37,6 +52,29 @@
 ```
 用户 → UI (8501) → 协调器 (8000) → [任务/邮件/日历代理] → 响应
 ```
+
+### Docker 部署架构（HuggingFace Spaces）
+
+虽然运行在单个 Docker 容器中，但**所有 Agent 间的通信都是真实的 HTTP A2A 调用**：
+
+```
+Docker 容器 (HuggingFace Spaces)
+├── Supervisor (进程管理)
+│   ├── Orchestrator    (localhost:8000) ─┐
+│   ├── Email Agent     (localhost:8001)  │
+│   ├── Calendar Agent  (localhost:8002)  ├─ HTTP A2A 通信
+│   ├── Task Agent      (localhost:8003)  │
+│   └── Streamlit UI    (0.0.0.0:7860) ───┘
+│
+└── 对外暴露端口: 7860 (Streamlit UI)
+```
+
+**关键特性：**
+- ✅ 真实的 Agent-to-Agent HTTP 调用（非函数调用）
+- ✅ 每个 Agent 独立运行在自己的进程中
+- ✅ 完整的 A2A 协议实现（Agent Card + /tasks 端点）
+- ✅ Orchestrator 通过 HTTP 发现和调用其他 Agent
+- ✅ 演示模式使用模拟数据，无需外部 API
 
 ## A2A 协议实现
 
