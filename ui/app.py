@@ -713,14 +713,20 @@ div[data-testid="stPopoverBody"] button p { margin: 0 !important; width: 100%; f
   padding: 6px 8px !important;
 }
 [data-testid="stChatInput"] textarea { font-size: 14px !important; color: var(--fg) !important; }
-[data-testid="stChatInputSubmitButton"] {
-  background: linear-gradient(135deg, #4F46E5, #7C3AED) !important; color: white !important;
-  border-radius: 10px !important; border: none !important;
-  width: 36px !important; height: 36px !important;
-  min-width: 36px !important; min-height: 36px !important;
-  max-width: 36px !important; max-height: 36px !important;
+/* Chat submit button - circular send button (works both inside & outside input box) */
+[data-testid="stChatInputSubmitButton"],
+[data-testid="stChatInputSubmitButton"] button {
+  background: linear-gradient(135deg, #4F46E5, #7C3AED) !important;
+  border-radius: 50% !important;
+  border: none !important;
+  width: 42px !important; height: 42px !important;
+  min-width: 42px !important; min-height: 42px !important;
+  max-width: 42px !important; max-height: 42px !important;
   padding: 0 !important;
   display: flex !important; align-items: center !important; justify-content: center !important;
+  box-shadow: 0 4px 14px rgba(124,58,237,.4) !important;
+  cursor: pointer !important;
+  align-self: center !important;
 }
 [data-testid="stChatInputSubmitButton"] svg { fill: white !important; width: 16px !important; height: 16px !important; }
 """
