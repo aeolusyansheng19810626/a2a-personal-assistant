@@ -80,6 +80,14 @@ class GroqClient:
         """
         Parse user intent and determine which agent and skill to use
         """
+        from datetime import datetime, timedelta
+        
+        # Get current date/time for context
+        now = datetime.now()
+        today = now.strftime("%Y-%m-%d")
+        tomorrow = (now + timedelta(days=1)).strftime("%Y-%m-%d")
+        current_time = now.strftime("%H:%M")
+        
         # Format agent cards for prompt with detailed skill parameters
         agents_info = []
         for agent_name, card in agent_cards.items():
@@ -98,6 +106,11 @@ class GroqClient:
         
         prompt = f"""You are an intelligent assistant router. Analyze the user's query and determine which agent and skill should handle it.
 
+CURRENT DATE/TIME CONTEXT:
+- Today's date: {today}
+- Tomorrow's date: {tomorrow}
+- Current time: {current_time}
+
 Available agents:
 {agents_text}
 
@@ -112,11 +125,14 @@ For TASKS:
 - For task operations: extract task_id if mentioned
 
 For CALENDAR EVENTS:
-- For event creation: extract summary (title), start_time, end_time, location, description
-- Time format: Use ISO 8601 format "YYYY-MM-DDTHH:MM:SS"
-- Parse relative times: "明天下午2点" = tomorrow 14:00, "今天上午10点" = today 10:00
+- For event creation: MUST extract summary (title), start_time, end_time
+- Time format: MUST use ISO 8601 format "YYYY-MM-DDTHH:MM:SS"
+- Parse relative times using CURRENT DATE/TIME CONTEXT above:
+  * "明天下午2点" = {tomorrow}T14:00:00
+  * "今天上午10点" = {today}T10:00:00
+  * "下午3点" = {today}T15:00:00
 - Default duration: 1 hour if end_time not specified
-- Current time context: Use current date/time to calculate relative times
+- ALWAYS provide all three required fields: summary, start_time, end_time
 
 For EMAILS:
 - For listing emails: use list_emails with max_results parameter
@@ -138,10 +154,10 @@ Query: "给john@example.com发送关于会议的邮件"
 Response: {{"agent": "email_agent", "skill": "send_email", "params": {{"to": "john@example.com", "subject": "关于会议", "body": "会议相关内容"}}, "reasoning": "User wants to send an email about a meeting"}}
 
 Query: "明天下午2点创建一个日历事件"
-Response: {{"agent": "calendar_agent", "skill": "create_event", "params": {{"summary": "会议", "start_time": "2026-05-03T14:00:00", "end_time": "2026-05-03T15:00:00"}}, "reasoning": "User wants to create a calendar event tomorrow at 2 PM"}}
+Response: {{"agent": "calendar_agent", "skill": "create_event", "params": {{"summary": "会议", "start_time": "{tomorrow}T14:00:00", "end_time": "{tomorrow}T15:00:00"}}, "reasoning": "User wants to create a calendar event tomorrow at 2 PM"}}
 
 Query: "今天上午10点到11点半开会"
-Response: {{"agent": "calendar_agent", "skill": "create_event", "params": {{"summary": "开会", "start_time": "2026-05-02T10:00:00", "end_time": "2026-05-02T11:30:00"}}, "reasoning": "User wants to create a meeting event today from 10:00 to 11:30"}}
+Response: {{"agent": "calendar_agent", "skill": "create_event", "params": {{"summary": "开会", "start_time": "{today}T10:00:00", "end_time": "{today}T11:30:00"}}, "reasoning": "User wants to create a meeting event today from 10:00 to 11:30"}}
 
 Respond with ONLY a JSON object in this exact format (no markdown, no explanation):
 {{
