@@ -1018,3 +1018,11 @@ if prompt := st.chat_input(t("chat_input_placeholder")):
                     })
 
         st.rerun()
+
+st.markdown("""
+<div style="text-align:center; padding: 24px 0 8px; color: var(--fg-3); font-size: 13px;">
+  Built by <a href="https://github.com/aeolusyansheng19810626" target="_blank" style="color: var(--violet); text-decoration: none;">Sheng Yan</a>
+  &nbsp;·&nbsp;
+  <a href="https://github.com/aeolusyansheng19810626" target="_blank" style="color: var(--violet); text-decoration: none;">GitHub</a>
+</div>
+""", unsafe_allow_html=True)
