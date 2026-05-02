@@ -902,6 +902,14 @@ with st.sidebar:
         st.session_state.messages = []
         st.rerun()
 
+    st.markdown("""
+<div style="position:absolute; bottom:16px; left:0; right:0; text-align:center; font-size:12px; color:#9CA3AF;">
+  Built by <a href="https://github.com/aeolusyansheng19810626" target="_blank" style="color:#7C3AED; text-decoration:none;">Sheng Yan</a>
+  &nbsp;·&nbsp;
+  <a href="https://github.com/aeolusyansheng19810626" target="_blank" style="color:#7C3AED; text-decoration:none;">GitHub</a>
+</div>
+""", unsafe_allow_html=True)
+
 # Display chat messages
 for message in st.session_state.messages:
     if message["role"] == "user":
@@ -1019,12 +1027,3 @@ if prompt := st.chat_input(t("chat_input_placeholder")):
 
         st.rerun()
 
-st.markdown("""
-<div style="position:fixed; bottom:108px; left:0; right:0; text-align:center; color: #9CA3AF; font-size: 12px; pointer-events: none; z-index: 9999;">
-  <span style="pointer-events: auto;">
-    Built by <a href="https://github.com/aeolusyansheng19810626" target="_blank" style="color: var(--violet); text-decoration: none;">Sheng Yan</a>
-    &nbsp;·&nbsp;
-    <a href="https://github.com/aeolusyansheng19810626" target="_blank" style="color: var(--violet); text-decoration: none;">GitHub</a>
-  </span>
-</div>
-""", unsafe_allow_html=True)
