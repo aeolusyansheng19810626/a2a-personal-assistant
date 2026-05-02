@@ -1,0 +1,31 @@
+name: Sync to HuggingFace Spaces
+
+on:
+  push:
+    branches:
+      - demo
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Push to HuggingFace Spaces
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          
+          # Add HuggingFace remote
+          git remote add hf https://huggingface.co/spaces/aeolusyansheng/a2a-personal-assistant || true
+          
+          # Push to HuggingFace
+          git push https://aeolusyansheng:$HF_TOKEN@huggingface.co/spaces/aeolusyansheng/a2a-personal-assistant demo:main --force
+
+# Made with Bob
