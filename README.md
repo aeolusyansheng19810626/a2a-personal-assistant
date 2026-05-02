@@ -24,7 +24,7 @@ pinned: false
 - **无需 Google API 配置**
 - 使用硬编码的模拟数据
 - 适合快速体验和演示
-- 🚀 **已部署到 HuggingFace Spaces**
+- 🚀 **已部署到 HuggingFace Spaces**：https://huggingface.co/spaces/aeolusyansheng/a2a-personal-assistant
 
 ## 系统架构
 
@@ -52,7 +52,7 @@ pinned: false
    - 5层模型降级系统
 
 5. **Streamlit UI** (端口 8501)
-   - 聊天界面
+   - 现代化聊天界面（紫色渐变 topbar、品牌侧边栏、气泡样式消息）
    - 实时代理状态监控
    - 示例查询和聊天历史
    - 多语言支持（中文、日文、英文）
@@ -384,6 +384,8 @@ a2a-personal-assistant/
 ✅ Streamlit UI 功能正常  
 ✅ OAuth 集成完成  
 ✅ 启动脚本已创建  
+✅ UI 美化完成（topbar、品牌侧边栏、聊天气泡）  
+✅ 已部署到 HuggingFace Spaces  
 ✅ 文档完整  
 
 **已就绪，可以开始测试和部署！**
