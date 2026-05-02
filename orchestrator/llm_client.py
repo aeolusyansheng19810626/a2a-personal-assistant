@@ -80,6 +80,14 @@ class GroqClient:
         """
         Parse user intent and determine which agent and skill to use
         """
+        from datetime import datetime, timedelta
+        
+        # Get current date/time for context
+        now = datetime.now()
+        today = now.strftime("%Y-%m-%d")
+        tomorrow = (now + timedelta(days=1)).strftime("%Y-%m-%d")
+        current_time = now.strftime("%H:%M")
+        
         # Format agent cards for prompt with detailed skill parameters
         agents_info = []
         for agent_name, card in agent_cards.items():
@@ -98,16 +106,40 @@ class GroqClient:
         
         prompt = f"""You are an intelligent assistant router. Analyze the user's query and determine which agent and skill should handle it.
 
+CURRENT DATE/TIME CONTEXT:
+- Today's date: {today}
+- Tomorrow's date: {tomorrow}
+- Current time: {current_time}
+
 Available agents:
 {agents_text}
 
 User query: "{user_query}"
 
 IMPORTANT: Extract ALL relevant parameters from the user's query:
+
+For TASKS:
 - For task creation: extract title, description, and priority (High/Medium/Low)
 - For Chinese priority keywords: "高优先级"=High, "中优先级"=Medium, "低优先级"=Low
 - For task listing: extract status filter (pending/completed) and priority filter
 - For task operations: extract task_id if mentioned
+
+For CALENDAR EVENTS:
+- For event creation: MUST extract summary (title), start_time, end_time
+- Time format: MUST use ISO 8601 format "YYYY-MM-DDTHH:MM:SS"
+- Parse relative times using CURRENT DATE/TIME CONTEXT above:
+  * "明天下午2点" = {tomorrow}T14:00:00
+  * "今天上午10点" = {today}T10:00:00
+  * "下午3点" = {today}T15:00:00
+- Default duration: 1 hour if end_time not specified
+- ALWAYS provide all three required fields: summary, start_time, end_time
+- If summary cannot be extracted from the query, use a default value: "日程事件" or generate based on time (e.g., "明天下午2点日程" or "会议")
+
+For EMAILS:
+- For listing emails: use list_emails with max_results parameter
+- For reading specific email: use read_email with message_id or count parameter
+- For sending email: extract to, subject, and body
+- For searching: use search_emails with query parameter
 
 Examples:
 Query: "创建一个高优先级任务：review代码"
@@ -115,6 +147,20 @@ Response: {{"agent": "task_agent", "skill": "create_task", "params": {{"title": 
 
 Query: "列出所有待办任务"
 Response: {{"agent": "task_agent", "skill": "list_tasks", "params": {{"status": "pending"}}, "reasoning": "User wants to list pending tasks"}}
+
+Query: "显示最新的5封邮件"
+Response: {{"agent": "email_agent", "skill": "list_emails", "params": {{"max_results": 5}}, "reasoning": "User wants to see the latest 5 emails"}}
+
+Query: "给john@example.com发送关于会议的邮件"
+Response: {{"agent": "email_agent", "skill": "send_email", "params": {{"to": "john@example.com", "subject": "关于会议", "body": "会议相关内容"}}, "reasoning": "User wants to send an email about a meeting"}}
+
+Query: "明天下午2点创建一个日历事件"
+Response: {{"agent": "calendar_agent", "skill": "create_event", "params": {{"summary": "明天下午2点日程", "start_time": "{tomorrow}T14:00:00", "end_time": "{tomorrow}T15:00:00"}}, "reasoning": "User wants to create a calendar event tomorrow at 2 PM"}}
+
+Note: When summary is not explicitly mentioned, generate a meaningful default based on time and context.
+
+Query: "今天上午10点到11点半开会"
+Response: {{"agent": "calendar_agent", "skill": "create_event", "params": {{"summary": "开会", "start_time": "{today}T10:00:00", "end_time": "{today}T11:30:00"}}, "reasoning": "User wants to create a meeting event today from 10:00 to 11:30"}}
 
 Respond with ONLY a JSON object in this exact format (no markdown, no explanation):
 {{
