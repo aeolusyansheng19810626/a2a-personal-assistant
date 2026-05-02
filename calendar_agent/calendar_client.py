@@ -87,11 +87,11 @@ class CalendarClient:
                 'description': description,
                 'start': {
                     'dateTime': start_time,
-                    'timeZone': 'UTC',
+                    'timeZone': 'Asia/Tokyo',
                 },
                 'end': {
                     'dateTime': end_time,
-                    'timeZone': 'UTC',
+                    'timeZone': 'Asia/Tokyo',
                 },
             }
             
