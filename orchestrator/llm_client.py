@@ -104,10 +104,19 @@ Available agents:
 User query: "{user_query}"
 
 IMPORTANT: Extract ALL relevant parameters from the user's query:
+
+For TASKS:
 - For task creation: extract title, description, and priority (High/Medium/Low)
 - For Chinese priority keywords: "高优先级"=High, "中优先级"=Medium, "低优先级"=Low
 - For task listing: extract status filter (pending/completed) and priority filter
 - For task operations: extract task_id if mentioned
+
+For CALENDAR EVENTS:
+- For event creation: extract summary (title), start_time, end_time, location, description
+- Time format: Use ISO 8601 format "YYYY-MM-DDTHH:MM:SS"
+- Parse relative times: "明天下午2点" = tomorrow 14:00, "今天上午10点" = today 10:00
+- Default duration: 1 hour if end_time not specified
+- Current time context: Use current date/time to calculate relative times
 
 Examples:
 Query: "创建一个高优先级任务：review代码"
@@ -115,6 +124,12 @@ Response: {{"agent": "task_agent", "skill": "create_task", "params": {{"title": 
 
 Query: "列出所有待办任务"
 Response: {{"agent": "task_agent", "skill": "list_tasks", "params": {{"status": "pending"}}, "reasoning": "User wants to list pending tasks"}}
+
+Query: "明天下午2点创建一个日历事件"
+Response: {{"agent": "calendar_agent", "skill": "create_event", "params": {{"summary": "会议", "start_time": "2026-05-03T14:00:00", "end_time": "2026-05-03T15:00:00"}}, "reasoning": "User wants to create a calendar event tomorrow at 2 PM"}}
+
+Query: "今天上午10点到11点半开会"
+Response: {{"agent": "calendar_agent", "skill": "create_event", "params": {{"summary": "开会", "start_time": "2026-05-02T10:00:00", "end_time": "2026-05-02T11:30:00"}}, "reasoning": "User wants to create a meeting event today from 10:00 to 11:30"}}
 
 Respond with ONLY a JSON object in this exact format (no markdown, no explanation):
 {{
