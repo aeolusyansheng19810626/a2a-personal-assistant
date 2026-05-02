@@ -525,7 +525,7 @@ section[data-testid="stSidebar"] details > summary > svg {
 .topbar-left { display: flex; flex-direction: column; }
 .page-title { font-size: 15px !important; font-weight: 600 !important; color: white !important; margin-bottom: 2px !important; }
 .page-sub { font-size: 11px !important; color: rgba(255,255,255,0.8) !important; }
-.topbar-right { display: flex !important; align-items: center !important; gap: 12px !important; }
+.topbar-right { display: flex !important; align-items: center !important; gap: 12px !important; padding-right: 80px !important; }
 .status { display: inline-flex !important; align-items: center !important; gap: 6px !important; padding: 6px 12px !important; border: 1px solid rgba(255,255,255,.3) !important; border-radius: 999px !important; color: white !important; font-size: 11px !important; white-space: nowrap !important; }
 .demo-pill { margin-right: 0 !important; }
 .status-dot { display: inline-flex !important; width: 6px !important; height: 6px !important; border-radius: 50% !important; background: white !important; flex-shrink: 0 !important; }
@@ -790,7 +790,7 @@ st.markdown(topbar_html, unsafe_allow_html=True)
 # Language Switcher - positioned in topbar via CSS (position:fixed)
 lang_labels = {"zh": "中", "ja": "日", "en": "英"}
 cur_label = lang_labels.get(st.session_state.lang, "中")
-with st.popover(f"🌐 {cur_label}", use_container_width=False):
+with st.popover(cur_label, use_container_width=False):
     st.markdown('<p class="lang-hdr">LANGUAGE / 语言</p>', unsafe_allow_html=True)
     for code, abbr, name in [("zh", "CN", "简体中文"), ("ja", "JP", "日本語"), ("en", "EN", "English")]:
         active = st.session_state.lang == code
