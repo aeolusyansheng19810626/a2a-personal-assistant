@@ -706,13 +706,6 @@ div[data-testid="stPopoverBody"] button p { margin: 0 !important; width: 100%; f
 
 /* ================= Chat Input ================= */
 [data-testid="stChatInput"] {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-}
-/* Move border/radius to inner flex row so overflow:hidden clips the abs-positioned button */
-[data-testid="stChatInput"] > div {
   background: var(--surface) !important;
   border: 1px solid var(--line-2) !important;
   border-radius: 16px !important;
@@ -720,9 +713,12 @@ div[data-testid="stPopoverBody"] button p { margin: 0 !important; width: 100%; f
   padding: 4px 6px 4px 12px !important;
   position: relative !important;
   overflow: hidden !important;
+}
+[data-testid="stChatInput"] > div {
   display: flex !important;
   align-items: center !important;
   gap: 6px !important;
+  padding: 0 !important;
   margin: 0 !important;
 }
 [data-testid="stChatInput"] textarea {
