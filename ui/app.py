@@ -36,7 +36,7 @@ i18n = {
         "system_status": "系统状态",
         "discovered_agents": "已发现的代理",
         "example_queries": "💡 示例查询",
-        "refresh_status": "🔄 刷新状态",
+        "refresh_status": "🔄 刷新",
         "clear_history": "🗑️ 清除聊天历史",
         "orchestrator_online": "🟢 协调器在线",
         "orchestrator_offline": "🔴 协调器离线",
@@ -44,6 +44,9 @@ i18n = {
         "task_agent": "任务代理",
         "calendar_agent": "日历代理",
         "email_agent": "邮件代理",
+        "task_agent_desc": "基于 SQLite 的本地任务管理。创建、列出、完成和管理带优先级的任务。",
+        "calendar_agent_desc": "Google Calendar 日历管理。列出、创建和管理日历事件。",
+        "email_agent_desc": "Gmail 邮件管理。使用 Gmail API 读取、发送、搜索和列出邮件。",
         "description_label": "描述",
         "endpoint_label": "端点",
         "skills_label": "技能",
@@ -64,14 +67,17 @@ i18n = {
         "system_status": "ｼｽﾃﾑｽﾃｰﾀｽ",
         "discovered_agents": "検出されたｴｰｼﾞｪﾝﾄ",
         "example_queries": "💡 ｻﾝﾌﾟﾙｸｴﾘ",
-        "refresh_status": "🔄 ｽﾃｰﾀｽ更新",
+        "refresh_status": "🔄 更新",
         "clear_history": "🗑️ ﾁｬｯﾄ履歴をｸﾘｱ",
         "orchestrator_online": "🟢 ｵｰｹｽﾄﾚｰﾀｵﾝﾗｲﾝ",
         "orchestrator_offline": "🔴 ｵｰｹｽﾄﾚｰﾀｵﾌﾗｲﾝ",
         "orchestrator_offline_msg": "❌ ｵｰｹｽﾄﾚｰﾀがｵﾌﾗｲﾝです。ｻｰﾋﾞｽを起動してください。",
-        "task_agent": "ﾀｽｸｴｰｼﾞｪﾝﾄ",
-        "calendar_agent": "ｶﾚﾝﾀﾞｰｴｰｼﾞｪﾝﾄ",
-        "email_agent": "ﾒｰﾙｴｰｼﾞｪﾝﾄ",
+        "task_agent": "ﾀｽｸ ｴｰｼﾞｪﾝﾄ",
+        "calendar_agent": "ｶﾚﾝﾀﾞｰ ｴｰｼﾞｪﾝﾄ",
+        "email_agent": "ﾒｰﾙ ｴｰｼﾞｪﾝﾄ",
+        "task_agent_desc": "SQLiteﾍﾞｰｽのﾛｰｶﾙﾀｽｸ管理。優先度付きﾀｽｸの作成・一覧・完了・管理。",
+        "calendar_agent_desc": "Googleｶﾚﾝﾀﾞｰ管理。ｶﾚﾝﾀﾞｰｲﾍﾞﾝﾄの一覧・作成・管理。",
+        "email_agent_desc": "Gmailﾒｰﾙ管理。Gmail APIでﾒｰﾙの読取・送信・検索・一覧表示。",
         "description_label": "説明",
         "endpoint_label": "ｴﾝﾄﾞﾎﾟｲﾝﾄ",
         "skills_label": "ｽｷﾙ",
@@ -93,7 +99,7 @@ i18n = {
         "system_status": "System Status",
         "discovered_agents": "Discovered Agents",
         "example_queries": "💡 Example Queries",
-        "refresh_status": "🔄 Refresh Status",
+        "refresh_status": "🔄 Refresh",
         "clear_history": "🗑️ Clear Chat History",
         "orchestrator_online": "🟢 Orchestrator Online",
         "orchestrator_offline": "🔴 Orchestrator Offline",
@@ -101,6 +107,9 @@ i18n = {
         "task_agent": "Task Agent",
         "calendar_agent": "Calendar Agent",
         "email_agent": "Email Agent",
+        "task_agent_desc": "SQLite-based local task management. Create, list, complete and manage prioritized tasks.",
+        "calendar_agent_desc": "Google Calendar management. List, create and manage calendar events.",
+        "email_agent_desc": "Gmail email management. Read, send, search and list emails using Gmail API.",
         "description_label": "Description",
         "endpoint_label": "Endpoint",
         "skills_label": "Skills",
@@ -188,6 +197,39 @@ input, textarea, select { font-family: inherit; font-size: inherit; color: inher
 .page-sub { color: rgba(255,255,255,.82) !important; font-size: 11.5px; margin-top: 1px; }
 .status { background: rgba(255,255,255,.18) !important; border-color: rgba(255,255,255,.3) !important; color: #fff !important; backdrop-filter: blur(8px); padding: 4px 10px !important; font-size: 11px !important; }
 .status-dot { background: #fff !important; box-shadow: 0 0 0 3px rgba(255,255,255,.25), 0 0 12px rgba(255,255,255,.6) !important; }
+
+/* Custom Status Box for perfect alignment */
+.custom-status-box {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 6px 12px !important;
+  border-radius: var(--r-sm) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  max-height: 38px !important;
+  line-height: 1 !important;
+  width: 100% !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+}
+.status-online {
+  background-color: #ecfdf5 !important;
+  color: #065f46 !important;
+  border: 1px solid #a7f3d0 !important;
+}
+.status-offline {
+  background-color: #fef2f2 !important;
+  color: #991b1b !important;
+  border: 1px solid #fecaca !important;
+}
+.custom-status-box span.status-text {
+  margin-top: 2px !important;
+}
 """
 
 streamlit_overrides = """
@@ -258,6 +300,41 @@ section[data-testid="stSidebar"][aria-expanded="true"] {
 section[data-testid="stSidebar"] div[data-testid="stHorizontalBlock"] {
   align-items: center !important;
 }
+section[data-testid="stSidebar"] [data-testid="column"] {
+  margin: 0 !important;
+}
+section[data-testid="stSidebar"] [data-testid="column"] > div {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  height: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+section[data-testid="stSidebar"] [data-testid="column"] [data-testid="stVerticalBlock"] {
+  gap: 0 !important;
+  padding: 0 !important;
+}
+section[data-testid="stSidebar"] .stButton, 
+section[data-testid="stSidebar"] .stMarkdown {
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
+  padding: 0 !important;
+}
+section[data-testid="stSidebar"] [data-testid="column"] [data-testid="stMarkdownContainer"] {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+  height: 38px !important;
+}
+section[data-testid="stSidebar"] [data-testid="column"] [data-testid="stMarkdownContainer"] p {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+  height: 38px !important;
+  display: flex !important;
+  align-items: center !important;
+}
 section[data-testid="stSidebar"] div[data-testid="stMarkdownContainer"] p {
   margin-bottom: 0 !important;
 }
@@ -275,12 +352,12 @@ section[data-testid="stSidebar"] button[data-testid="baseButton-secondary"] {
   padding: 10px 12px !important;
   height: auto !important;
   min-height: 36px !important;
-  font-size: 10px !important;
+  font-size: 13.5px !important;
   transition: all 0.2s ease !important;
 }
 section[data-testid="stSidebar"] button[kind="secondary"] p,
 section[data-testid="stSidebar"] button[data-testid="baseButton-secondary"] p {
-  font-size: 10px !important;
+  font-size: 13.5px !important;
 }
 section[data-testid="stSidebar"] button[kind="secondary"]:hover,
 section[data-testid="stSidebar"] button[data-testid="baseButton-secondary"]:hover {
@@ -325,29 +402,85 @@ section[data-testid="stSidebar"] .stButton > button[kind="primary"] {
   color: #fff !important;
   border: 0 !important;
   border-radius: var(--r-sm) !important;
-  height: 36px !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  margin: 0 !important;
   font-weight: 500 !important;
-  font-size: 11px !important;
+  font-size: 13px !important;
+  padding: 0 4px !important;
+  white-space: nowrap !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   box-shadow: 0 6px 16px rgba(124,58,237,.28), inset 0 1px 0 rgba(255,255,255,.18) !important;
   transition: background-position .3s, transform .05s, box-shadow .2s !important;
+}
+section[data-testid="stSidebar"] .stButton > button[kind="primary"] p {
+  font-size: 13px !important;
+  white-space: nowrap !important;
+  margin: 0 !important;
+  line-height: 1 !important;
 }
 section[data-testid="stSidebar"] .stButton > button[kind="primary"]:hover {
   background-position: 100% 0 !important;
   box-shadow: 0 10px 22px rgba(124,58,237,.35) !important;
 }
 
-/* 侧边栏 alert 组件字号 */
-section[data-testid="stSidebar"] [data-testid="stAlert"] { font-size: 11px !important; line-height: 1.4 !important; }
-section[data-testid="stSidebar"] [data-testid="stAlert"] * { font-size: 11px !important; }
-section[data-testid="stSidebar"] [data-testid="stAlert"] p { font-size: 11px !important; }
-section[data-testid="stSidebar"] [data-testid="stAlert"] div { font-size: 11px !important; }
-section[data-testid="stSidebar"] [data-testid="stAlert"] span { font-size: 11px !important; }
-section[data-testid="stSidebar"] .stAlert { font-size: 11px !important; }
-section[data-testid="stSidebar"] .stAlert * { font-size: 11px !important; }
-section[data-testid="stSidebar"] .stAlert > * { font-size: 11px !important; }
+/* 侧边栏 alert 组件完美对齐 */
+section[data-testid="stSidebar"] [data-testid="stAlert"] { 
+  font-size: 13px !important; 
+  height: 38px !important;
+  min-height: 38px !important;
+  margin: 0 !important;
+  padding: 0 12px !important; 
+  white-space: nowrap !important; 
+  display: flex !important;
+  align-items: center !important;
+}
+section[data-testid="stSidebar"] [data-testid="stAlert"] * { font-size: 13px !important; white-space: nowrap !important; margin: 0 !important; }
+section[data-testid="stSidebar"] [data-testid="stAlert"] [data-testid="stMarkdownContainer"] p {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+}
+section[data-testid="stSidebar"] [data-testid="stAlert"] div { font-size: 13px !important; }
+section[data-testid="stSidebar"] [data-testid="stAlert"] span { font-size: 13px !important; }
+section[data-testid="stSidebar"] .stAlert { font-size: 13px !important; }
+section[data-testid="stSidebar"] .stAlert * { font-size: 13px !important; }
+section[data-testid="stSidebar"] .stAlert > * { font-size: 13px !important; }
 /* 确保列内的 alert 也被应用 */
-[data-testid="stHorizontalBlock"] [data-testid="stAlert"] { font-size: 11px !important; }
-[data-testid="stHorizontalBlock"] [data-testid="stAlert"] * { font-size: 11px !important; }
+[data-testid="stHorizontalBlock"] [data-testid="stAlert"] { 
+  font-size: 13px !important; 
+  height: 38px !important;
+  min-height: 38px !important;
+  margin: 0 !important;
+  padding: 0 12px !important; 
+  white-space: nowrap !important; 
+  display: flex !important;
+  align-items: center !important;
+}
+[data-testid="stHorizontalBlock"] [data-testid="stAlert"] * { font-size: 13px !important; white-space: nowrap !important; margin: 0 !important; }
+
+/* 侧边栏 Expander (卡片) 组件字号 */
+section[data-testid="stSidebar"] [data-testid="stExpander"] summary p,
+section[data-testid="stSidebar"] [data-testid="stExpander"] summary span,
+section[data-testid="stSidebar"] [data-testid="stExpander"] summary div {
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+}
+section[data-testid="stSidebar"] [data-testid="stExpander"] [data-testid="stText"],
+section[data-testid="stSidebar"] [data-testid="stExpander"] [data-testid="stMarkdownContainer"] p,
+section[data-testid="stSidebar"] [data-testid="stExpander"] [data-testid="stMarkdownContainer"] li,
+section[data-testid="stSidebar"] [data-testid="stExpander"] [data-testid="stMarkdownContainer"] span,
+section[data-testid="stSidebar"] [data-testid="stExpander"] [data-testid="stMarkdownContainer"] strong {
+  font-size: 13px !important;
+  line-height: 1.6 !important;
+}
+section[data-testid="stSidebar"] [data-testid="stExpander"] [data-testid="stMarkdownContainer"] code {
+  font-size: 12px !important;
+}
 
 /* ================= 主区顶部 Topbar ================= */
 .topbar-wrapper {
@@ -667,19 +800,25 @@ with st.sidebar:
 
     st.markdown(f'<div class="side-label">{t("system_status")}</div>', unsafe_allow_html=True)
 
-    # Check orchestrator status - two columns layout
-    col1, col2 = st.columns([1, 1])
+    # Check orchestrator status - status on left, refresh button on right
+    col1, col2 = st.columns([1.8, 1], gap="small")
     with col1:
+        if st.session_state.orchestrator_online:
+            msg = t("orchestrator_online")
+            emoji = msg[0]
+            text = msg[1:].strip()
+            st.markdown(f'<div class="custom-status-box status-online"><span>{emoji}</span><span class="status-text">{text}</span></div>', unsafe_allow_html=True)
+        else:
+            msg = t("orchestrator_offline")
+            emoji = msg[0]
+            text = msg[1:].strip()
+            st.markdown(f'<div class="custom-status-box status-offline"><span>{emoji}</span><span class="status-text">{text}</span></div>', unsafe_allow_html=True)
+
+    with col2:
         if st.button(t("refresh_status"), use_container_width=True, type="primary"):
             st.session_state.orchestrator_online = check_orchestrator_health()
             st.session_state.agents_cache = get_discovered_agents()
             st.rerun()
-
-    with col2:
-        if st.session_state.orchestrator_online:
-            st.success(t("orchestrator_online"))
-        else:
-            st.error(t("orchestrator_offline"))
 
     if st.session_state.orchestrator_online:
         # Get agents from cache
@@ -690,7 +829,9 @@ with st.sidebar:
             for agent_name, agent_card in agents.items():
                 display_name = t(agent_name)
                 with st.expander(f"📦 {display_name}"):
-                    st.write(f"**{t('description_label')}：** {agent_card.get('description', 'N/A')}")
+                    desc_key = f"{agent_name}_desc"
+                    description = t(desc_key) if t(desc_key) != desc_key else agent_card.get('description', 'N/A')
+                    st.write(f"**{t('description_label')}：** {description}")
                     st.write(f"**{t('endpoint_label')}：** {agent_card.get('endpoint', 'N/A')}")
 
                     skills = agent_card.get('skills', [])
