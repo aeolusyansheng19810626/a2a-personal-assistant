@@ -782,7 +782,7 @@ if "agents_cache" not in st.session_state:
 
 # Topbar
 agent_count = len(st.session_state.agents_cache)
-demo_pill_html = '<div class="status demo-pill">🎭 演示模式</div>' if DEMO_MODE else ""
+demo_pill_html = '<div class="status demo-pill">🎬 演示模式</div>' if DEMO_MODE else ""
 
 topbar_html = f"<div class='topbar-wrapper'><div class='topbar'><div class='topbar-left'><div class='page-title'>{t('title')}</div><div class='page-sub'>{t('subtitle')}</div></div><div class='topbar-right'>" + demo_pill_html + "<div id='lang-switcher-anchor'></div></div></div></div></div>"
 st.markdown(topbar_html, unsafe_allow_html=True)
