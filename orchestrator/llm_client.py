@@ -133,6 +133,7 @@ For CALENDAR EVENTS:
   * "下午3点" = {today}T15:00:00
 - Default duration: 1 hour if end_time not specified
 - ALWAYS provide all three required fields: summary, start_time, end_time
+- If summary cannot be extracted from the query, use a default value: "日程事件" or generate based on time (e.g., "明天下午2点日程" or "会议")
 
 For EMAILS:
 - For listing emails: use list_emails with max_results parameter
@@ -154,7 +155,9 @@ Query: "给john@example.com发送关于会议的邮件"
 Response: {{"agent": "email_agent", "skill": "send_email", "params": {{"to": "john@example.com", "subject": "关于会议", "body": "会议相关内容"}}, "reasoning": "User wants to send an email about a meeting"}}
 
 Query: "明天下午2点创建一个日历事件"
-Response: {{"agent": "calendar_agent", "skill": "create_event", "params": {{"summary": "会议", "start_time": "{tomorrow}T14:00:00", "end_time": "{tomorrow}T15:00:00"}}, "reasoning": "User wants to create a calendar event tomorrow at 2 PM"}}
+Response: {{"agent": "calendar_agent", "skill": "create_event", "params": {{"summary": "明天下午2点日程", "start_time": "{tomorrow}T14:00:00", "end_time": "{tomorrow}T15:00:00"}}, "reasoning": "User wants to create a calendar event tomorrow at 2 PM"}}
+
+Note: When summary is not explicitly mentioned, generate a meaningful default based on time and context.
 
 Query: "今天上午10点到11点半开会"
 Response: {{"agent": "calendar_agent", "skill": "create_event", "params": {{"summary": "开会", "start_time": "{today}T10:00:00", "end_time": "{today}T11:30:00"}}, "reasoning": "User wants to create a meeting event today from 10:00 to 11:30"}}
