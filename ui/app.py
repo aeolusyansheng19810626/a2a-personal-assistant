@@ -721,6 +721,10 @@ div[data-testid="stPopoverBody"] button p { margin: 0 !important; width: 100%; f
   padding: 0 !important;
   margin: 0 !important;
 }
+/* Inset button wrapper so border-radius doesn't clip the circle */
+[data-testid="stChatInput"] > div > div:last-child {
+  right: 6px !important;
+}
 [data-testid="stChatInput"] textarea {
   font-size: 14px !important;
   color: var(--fg) !important;
