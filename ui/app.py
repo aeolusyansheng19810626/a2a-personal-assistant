@@ -903,7 +903,7 @@ with st.sidebar:
         st.rerun()
 
     st.markdown("""
-<div style="position:absolute; bottom:16px; left:0; right:0; text-align:center; font-size:12px; color:#9CA3AF;">
+<div style="text-align:center; font-size:12px; color:#9CA3AF; padding: 16px 0 8px;">
   Built by <a href="https://github.com/aeolusyansheng19810626" target="_blank" style="color:#7C3AED; text-decoration:none;">Sheng Yan</a>
   &nbsp;·&nbsp;
   <a href="https://github.com/aeolusyansheng19810626" target="_blank" style="color:#7C3AED; text-decoration:none;">GitHub</a>
