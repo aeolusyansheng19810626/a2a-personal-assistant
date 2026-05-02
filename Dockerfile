@@ -15,10 +15,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY . .
 
-# Create .env file with DEMO_MODE enabled
-RUN echo "GROQ_API_KEY=${GROQ_API_KEY}" > .env && \
-    echo "DEMO_MODE=true" >> .env
-
 # Copy supervisor configuration
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
@@ -28,7 +24,14 @@ EXPOSE 7860
 # Create log directory
 RUN mkdir -p /var/log/supervisor
 
-# Start supervisor to manage all services
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+# Create startup script that generates .env at runtime
+RUN echo '#!/bin/bash\n\
+echo "GROQ_API_KEY=${GROQ_API_KEY}" > /app/.env\n\
+echo "DEMO_MODE=true" >> /app/.env\n\
+exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf\n\
+' > /start.sh && chmod +x /start.sh
+
+# Start with the startup script
+CMD ["/start.sh"]
 
 # Made with Bob
