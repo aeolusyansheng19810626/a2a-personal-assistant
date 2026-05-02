@@ -481,6 +481,10 @@ section[data-testid="stSidebar"] [data-testid="stExpander"] [data-testid="stMark
 section[data-testid="stSidebar"] [data-testid="stExpander"] [data-testid="stMarkdownContainer"] code {
   font-size: 12px !important;
 }
+/* Hide default Streamlit expander chevron SVG in sidebar */
+section[data-testid="stSidebar"] [data-testid="stExpander"] summary svg {
+  display: none !important;
+}
 
 /* ================= 主区顶部 Topbar ================= */
 .topbar-wrapper {
@@ -703,8 +707,13 @@ div[data-testid="stPopoverBody"] button p { margin: 0 !important; width: 100%; f
 [data-testid="stChatInputSubmitButton"] {
   background: linear-gradient(135deg, #4F46E5, #7C3AED) !important; color: white !important;
   border-radius: 10px !important; border: none !important;
+  width: 36px !important; height: 36px !important;
+  min-width: 36px !important; min-height: 36px !important;
+  max-width: 36px !important; max-height: 36px !important;
+  padding: 0 !important;
+  display: flex !important; align-items: center !important; justify-content: center !important;
 }
-[data-testid="stChatInputSubmitButton"] svg { fill: white !important; }
+[data-testid="stChatInputSubmitButton"] svg { fill: white !important; width: 16px !important; height: 16px !important; }
 """
 
 st.markdown(f"<style>\n{styles_css}\n{streamlit_overrides}\n</style>", unsafe_allow_html=True)
@@ -772,22 +781,23 @@ demo_pill_html = '<div class="status demo-pill">🎭 演示模式</div>' if DEMO
 topbar_html = f"<div class='topbar-wrapper'><div class='topbar'><div class='topbar-left'><div class='page-title'>{t('title')}</div><div class='page-sub'>{t('subtitle')}</div></div><div class='topbar-right'>" + demo_pill_html + "<div id='lang-switcher-anchor'></div></div></div></div></div>"
 st.markdown(topbar_html, unsafe_allow_html=True)
 
-# Language Switcher - positioned in topbar via CSS
-lang_labels = {"zh": "中", "ja": "日", "en": "英"}
-cur_label = lang_labels.get(st.session_state.lang, "中")
-with st.popover(f"🌐 {cur_label}", use_container_width=False):
-    st.markdown('<p class="lang-hdr">LANGUAGE / 语言</p>', unsafe_allow_html=True)
-    for code, abbr, name in [("zh", "CN", "简体中文"), ("ja", "JP", "日本語"), ("en", "EN", "English")]:
-        active = st.session_state.lang == code
-        label = f"{abbr}  {name}  ✓" if active else f"{abbr}  {name}"
-        if st.button(label, use_container_width=True,
-                     type="primary" if active else "secondary",
-                     key=f"lang_{code}"):
-            st.session_state.lang = code
-            st.rerun()
 
-# Sidebar
+
 with st.sidebar:
+    # Language Switcher at top of sidebar
+    lang_labels = {"zh": "中", "ja": "日", "en": "英"}
+    cur_label = lang_labels.get(st.session_state.lang, "中")
+    with st.popover(f"🌐 {cur_label}", use_container_width=False):
+        st.markdown('<p class="lang-hdr">LANGUAGE / 语言</p>', unsafe_allow_html=True)
+        for code, abbr, name in [("zh", "CN", "简体中文"), ("ja", "JP", "日本語"), ("en", "EN", "English")]:
+            active = st.session_state.lang == code
+            label = f"{abbr}  {name}  ✓" if active else f"{abbr}  {name}"
+            if st.button(label, use_container_width=True,
+                         type="primary" if active else "secondary",
+                         key=f"lang_{code}"):
+                st.session_state.lang = code
+                st.rerun()
+
     # Sidebar title: English without parentheses, others with parentheses
     sidebar_title = t('sidebar_title') if st.session_state.lang == "en" else t('title')
     if st.session_state.lang == "en":
