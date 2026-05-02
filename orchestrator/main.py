@@ -30,6 +30,8 @@ class QueryResponse(BaseModel):
 
 def discover_agents():
     """Discover all agents by calling their agent card endpoints"""
+    import time
+    
     agent_ports = {
         "task_agent": 8003,
         "calendar_agent": 8002,
@@ -37,33 +39,53 @@ def discover_agents():
     }
     
     discovered = {}
+    max_retries = 3
+    retry_delay = 2  # seconds
     
     for agent_name, port in agent_ports.items():
-        try:
-            response = requests.get(
-                f"http://localhost:{port}/.well-known/agent.json",
-                timeout=2
-            )
+        for attempt in range(max_retries):
+            try:
+                response = requests.get(
+                    f"http://localhost:{port}/.well-known/agent.json",
+                    timeout=5
+                )
+                
+                if response.status_code == 200:
+                    agent_card = response.json()
+                    discovered[agent_name] = agent_card
+                    print(f"✓ Discovered {agent_name} at port {port}")
+                    break  # Success, move to next agent
+                else:
+                    print(f"✗ Attempt {attempt + 1}/{max_retries}: {agent_name} returned HTTP {response.status_code}")
             
-            if response.status_code == 200:
-                agent_card = response.json()
-                discovered[agent_name] = agent_card
-                print(f"✓ Discovered {agent_name} at port {port}")
-            else:
-                print(f"✗ Failed to discover {agent_name}: HTTP {response.status_code}")
+            except requests.exceptions.RequestException as e:
+                print(f"✗ Attempt {attempt + 1}/{max_retries}: Failed to discover {agent_name}: {e}")
+            
+            # Wait before retry (except on last attempt)
+            if attempt < max_retries - 1:
+                time.sleep(retry_delay)
         
-        except requests.exceptions.RequestException as e:
-            print(f"✗ Failed to discover {agent_name}: {e}")
+        # If all retries failed
+        if agent_name not in discovered:
+            print(f"✗ Failed to discover {agent_name} after {max_retries} attempts")
     
     return discovered
 
 @app.on_event("startup")
 async def startup_event():
     """Discover agents on startup"""
+    import time
+    import asyncio
+    
     global agent_registry
+    
+    # Wait a bit for other services to start
+    print("Waiting for other services to start...")
+    await asyncio.sleep(3)
+    
     print("Starting agent discovery...")
     agent_registry = discover_agents()
-    print(f"Discovery complete. Found {len(agent_registry)} agents.")
+    print(f"Discovery complete. Found {len(agent_registry)} agents: {list(agent_registry.keys())}")
 
 @app.get("/.well-known/agent.json")
 async def get_agent_card():

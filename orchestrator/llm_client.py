@@ -118,12 +118,24 @@ For CALENDAR EVENTS:
 - Default duration: 1 hour if end_time not specified
 - Current time context: Use current date/time to calculate relative times
 
+For EMAILS:
+- For listing emails: use list_emails with max_results parameter
+- For reading specific email: use read_email with message_id or count parameter
+- For sending email: extract to, subject, and body
+- For searching: use search_emails with query parameter
+
 Examples:
 Query: "创建一个高优先级任务：review代码"
 Response: {{"agent": "task_agent", "skill": "create_task", "params": {{"title": "review代码", "priority": "High"}}, "reasoning": "User wants to create a high priority task"}}
 
 Query: "列出所有待办任务"
 Response: {{"agent": "task_agent", "skill": "list_tasks", "params": {{"status": "pending"}}, "reasoning": "User wants to list pending tasks"}}
+
+Query: "显示最新的5封邮件"
+Response: {{"agent": "email_agent", "skill": "list_emails", "params": {{"max_results": 5}}, "reasoning": "User wants to see the latest 5 emails"}}
+
+Query: "给john@example.com发送关于会议的邮件"
+Response: {{"agent": "email_agent", "skill": "send_email", "params": {{"to": "john@example.com", "subject": "关于会议", "body": "会议相关内容"}}, "reasoning": "User wants to send an email about a meeting"}}
 
 Query: "明天下午2点创建一个日历事件"
 Response: {{"agent": "calendar_agent", "skill": "create_event", "params": {{"summary": "会议", "start_time": "2026-05-03T14:00:00", "end_time": "2026-05-03T15:00:00"}}, "reasoning": "User wants to create a calendar event tomorrow at 2 PM"}}
