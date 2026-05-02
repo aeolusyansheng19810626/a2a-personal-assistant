@@ -1,3 +1,12 @@
+---
+title: A2A Personal Assistant
+emoji: 🤖
+colorFrom: indigo
+colorTo: purple
+sdk: docker
+pinned: false
+---
+
 # A2A 个人助手
 
 基于 A2A（Agent-to-Agent）协议的多智能体个人助手系统。五个独立服务通过 A2A 协议通信，处理邮件、日历和任务管理。
