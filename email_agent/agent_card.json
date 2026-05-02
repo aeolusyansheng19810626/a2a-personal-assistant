@@ -1,0 +1,40 @@
+{
+  "name": "email_agent",
+  "description": "Gmail 邮件管理。使用 Gmail API 读取、发送、搜索和列出邮件。",
+  "endpoint": "http://localhost:8001",
+  "skills": [
+    {
+      "name": "read_email",
+      "description": "通过 ID 读取特定邮件或获取最新邮件",
+      "parameters": {
+        "message_id": "string (可选): 特定邮件 ID",
+        "count": "integer (可选): 要检索的最新邮件数量（默认：5）"
+      }
+    },
+    {
+      "name": "send_email",
+      "description": "发送邮件",
+      "parameters": {
+        "to": "string (必需): 收件人邮箱地址",
+        "subject": "string (必需): 邮件主题",
+        "body": "string (必需): 邮件正文内容"
+      }
+    },
+    {
+      "name": "list_emails",
+      "description": "列出收件箱中的邮件",
+      "parameters": {
+        "max_results": "integer (可选): 最大邮件数量（默认：10）",
+        "query": "string (可选): Gmail 搜索查询"
+      }
+    },
+    {
+      "name": "search_emails",
+      "description": "按关键词或查询搜索邮件",
+      "parameters": {
+        "query": "string (必需): 搜索查询（例如：'from:user@example.com', 'subject:meeting'）",
+        "max_results": "integer (可选): 最大结果数（默认：10）"
+      }
+    }
+  ]
+}

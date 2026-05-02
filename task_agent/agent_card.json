@@ -1,0 +1,38 @@
+{
+  "name": "task_agent",
+  "description": "基于 SQLite 的本地任务管理。创建、列出、完成和管理带优先级的任务。",
+  "endpoint": "http://localhost:8003",
+  "skills": [
+    {
+      "name": "create_task",
+      "description": "创建新任务",
+      "parameters": {
+        "title": "string (必需)",
+        "description": "string (可选)",
+        "priority": "string (可选): High, Medium, 或 Low"
+      }
+    },
+    {
+      "name": "list_tasks",
+      "description": "列出任务（可选过滤）",
+      "parameters": {
+        "status": "string (可选): pending 或 completed",
+        "priority": "string (可选): High, Medium, 或 Low"
+      }
+    },
+    {
+      "name": "get_task",
+      "description": "获取特定任务的详细信息",
+      "parameters": {
+        "task_id": "integer (必需)"
+      }
+    },
+    {
+      "name": "complete_task",
+      "description": "将任务标记为已完成",
+      "parameters": {
+        "task_id": "integer (必需)"
+      }
+    }
+  ]
+}

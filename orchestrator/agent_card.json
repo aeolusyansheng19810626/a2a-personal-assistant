@@ -1,0 +1,19 @@
+{
+  "name": "orchestrator",
+  "description": "Main orchestrator that routes user requests to appropriate agents using LLM-based intent recognition.",
+  "endpoint": "http://localhost:8000",
+  "skills": [
+    {
+      "name": "process_query",
+      "description": "Process natural language query and route to appropriate agent",
+      "parameters": {
+        "query": "string (required): User's natural language query"
+      }
+    },
+    {
+      "name": "list_agents",
+      "description": "List all discovered agents and their capabilities",
+      "parameters": {}
+    }
+  ]
+}

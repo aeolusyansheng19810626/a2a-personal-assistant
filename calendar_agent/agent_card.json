@@ -1,0 +1,38 @@
+{
+  "name": "calendar_agent",
+  "description": "Google Calendar 日历管理。列出、创建和管理日历事件。",
+  "endpoint": "http://localhost:8002",
+  "skills": [
+    {
+      "name": "list_events",
+      "description": "列出即将到来的日历事件",
+      "parameters": {
+        "max_results": "integer (可选): 最大事件数量（默认：10）",
+        "time_min": "string (可选): ISO 格式的开始时间（默认：现在）"
+      }
+    },
+    {
+      "name": "create_event",
+      "description": "创建新的日历事件",
+      "parameters": {
+        "summary": "string (必需): 事件标题",
+        "start_time": "string (必需): ISO 格式的开始时间",
+        "end_time": "string (必需): ISO 格式的结束时间",
+        "description": "string (可选): 事件描述",
+        "location": "string (可选): 事件地点"
+      }
+    },
+    {
+      "name": "today_schedule",
+      "description": "获取今日日程",
+      "parameters": {}
+    },
+    {
+      "name": "get_event",
+      "description": "获取特定事件的详细信息",
+      "parameters": {
+        "event_id": "string (必需): 事件 ID"
+      }
+    }
+  ]
+}
