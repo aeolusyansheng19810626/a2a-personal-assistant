@@ -20,14 +20,14 @@ class CalendarClient:
         self.authenticate()
     
     def authenticate(self):
-        """Authenticate with Google Calendar API using OAuth2"""
+        """OAuth2を使用してGoogle Calendar APIで認証"""
         creds = None
         
-        # Load existing token
+        # 既存のトークンを読み込み
         if os.path.exists(self.token_path):
             creds = Credentials.from_authorized_user_file(self.token_path, SCOPES)
         
-        # If no valid credentials, authenticate
+        # 有効な認証情報がない場合は認証を実行
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
@@ -44,7 +44,7 @@ class CalendarClient:
         self.service = build('calendar', 'v3', credentials=creds)
     
     def list_events(self, max_results: int = 10, time_min: Optional[str] = None) -> List[Dict]:
-        """List upcoming calendar events"""
+        """今後のカレンダーイベントを一覧表示"""
         try:
             if not time_min:
                 time_min = datetime.utcnow().isoformat() + 'Z'
@@ -78,9 +78,9 @@ class CalendarClient:
         except HttpError as error:
             raise Exception(f"Calendar API error: {error}")
     
-    def create_event(self, summary: str, start_time: str, end_time: str, 
+    def create_event(self, summary: str, start_time: str, end_time: str,
                      description: str = "", location: str = "") -> Dict:
-        """Create a calendar event"""
+        """カレンダーイベントを作成"""
         try:
             event = {
                 'summary': summary,
@@ -115,9 +115,9 @@ class CalendarClient:
             raise Exception(f"Calendar API error: {error}")
     
     def get_today_schedule(self) -> List[Dict]:
-        """Get today's schedule"""
+        """今日のスケジュールを取得"""
         try:
-            # Start of today
+            # 今日の開始時刻
             now = datetime.utcnow()
             start_of_day = datetime(now.year, now.month, now.day, 0, 0, 0)
             end_of_day = start_of_day + timedelta(days=1)
@@ -155,7 +155,7 @@ class CalendarClient:
             raise Exception(f"Calendar API error: {error}")
     
     def get_event(self, event_id: str) -> Optional[Dict]:
-        """Get a specific event by ID"""
+        """IDで特定のイベントを取得"""
         try:
             event = self.service.events().get(
                 calendarId='primary',
@@ -178,4 +178,3 @@ class CalendarClient:
         except HttpError as error:
             raise Exception(f"Calendar API error: {error}")
 
-# Made with Bob

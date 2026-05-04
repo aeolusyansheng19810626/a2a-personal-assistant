@@ -8,15 +8,15 @@ from datetime import datetime
 from dotenv import load_dotenv
 from gmail_client import GmailClient
 
-# Load environment variables
+# 環境変数を読み込み
 load_dotenv(Path(__file__).parent.parent / ".env")
 
 app = FastAPI(title="Email Agent", version="1.0.0")
 
-# Check DEMO_MODE
+# DEMO_MODEをチェック
 DEMO_MODE = os.getenv("DEMO_MODE", "false").lower() == "true"
 
-# Initialize Gmail client (skip if in demo mode)
+# Gmailクライアントを初期化（デモモードの場合はスキップ）
 gmail = None
 if not DEMO_MODE:
     try:
@@ -37,14 +37,14 @@ class TaskResponse(BaseModel):
 
 @app.get("/.well-known/agent.json")
 async def get_agent_card():
-    """Return agent card for A2A discovery"""
+    """A2A検出用のエージェントカードを返す"""
     agent_card_path = Path(__file__).parent / "agent_card.json"
     with open(agent_card_path, "r", encoding="utf-8") as f:
         return json.load(f)
 
 @app.get("/health")
 async def health_check():
-    """Health check endpoint"""
+    """ヘルスチェックエンドポイント"""
     return {
         "status": "healthy" if (gmail or DEMO_MODE) else "degraded",
         "agent": "email_agent",
@@ -53,7 +53,7 @@ async def health_check():
     }
 
 def get_demo_emails():
-    """Return demo email data"""
+    """デモ用のメールデータを返す"""
     return [
         {
             "id": "demo_001",
@@ -99,8 +99,8 @@ def get_demo_emails():
 
 @app.post("/tasks", response_model=TaskResponse)
 async def execute_task(request: TaskRequest):
-    """Execute a task based on skill name"""
-    # In demo mode, use mock data
+    """スキル名に基づいてタスクを実行"""
+    # デモモードではモックデータを使用
     if DEMO_MODE:
         try:
             skill = request.skill
@@ -112,7 +112,7 @@ async def execute_task(request: TaskRequest):
                 count = params.get("count", 5)
                 
                 if message_id:
-                    # Find specific email
+                    # 特定のメールを検索
                     email = next((e for e in demo_emails if e["id"] == message_id), None)
                     if not email:
                         return TaskResponse(
@@ -178,7 +178,7 @@ async def execute_task(request: TaskRequest):
                 if not query:
                     raise HTTPException(status_code=400, detail="query is required")
                 
-                # Simple demo search - filter by subject or body
+                # シンプルなデモ検索 - 件名または本文でフィルタ
                 demo_emails = get_demo_emails()
                 filtered = [e for e in demo_emails if query.lower() in e['subject'].lower() or query.lower() in e['body'].lower()]
                 
@@ -212,7 +212,7 @@ async def execute_task(request: TaskRequest):
                 error=str(e)
             )
     
-    # Real mode - use Gmail API
+    # 実モード - Gmail APIを使用
     if not gmail:
         return TaskResponse(
             status="error",
@@ -228,7 +228,7 @@ async def execute_task(request: TaskRequest):
             count = params.get("count", 5)
             
             if message_id:
-                # Read specific email
+                # 特定のメールを読み取り
                 email = gmail.get_email(message_id)
                 if not email:
                     return TaskResponse(
@@ -341,4 +341,3 @@ if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
 
-# Made with Bob

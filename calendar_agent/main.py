@@ -8,15 +8,15 @@ from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from calendar_client import CalendarClient
 
-# Load environment variables
+# 環境変数を読み込み
 load_dotenv(Path(__file__).parent.parent / ".env")
 
 app = FastAPI(title="Calendar Agent", version="1.0.0")
 
-# Check DEMO_MODE
+# DEMO_MODEをチェック
 DEMO_MODE = os.getenv("DEMO_MODE", "false").lower() == "true"
 
-# Initialize Calendar client (skip if in demo mode)
+# Calendarクライアントを初期化（デモモードの場合はスキップ）
 calendar = None
 if not DEMO_MODE:
     try:
@@ -37,14 +37,14 @@ class TaskResponse(BaseModel):
 
 @app.get("/.well-known/agent.json")
 async def get_agent_card():
-    """Return agent card for A2A discovery"""
+    """A2A検出用のエージェントカードを返す"""
     agent_card_path = Path(__file__).parent / "agent_card.json"
     with open(agent_card_path, "r", encoding="utf-8") as f:
         return json.load(f)
 
 @app.get("/health")
 async def health_check():
-    """Health check endpoint"""
+    """ヘルスチェックエンドポイント"""
     return {
         "status": "healthy" if (calendar or DEMO_MODE) else "degraded",
         "agent": "calendar_agent",
@@ -116,8 +116,8 @@ def get_demo_events():
 
 @app.post("/tasks", response_model=TaskResponse)
 async def execute_task(request: TaskRequest):
-    """Execute a task based on skill name"""
-    # In demo mode, use mock data
+    """スキル名に基づいてタスクを実行"""
+    # デモモードではモックデータを使用
     if DEMO_MODE:
         try:
             skill = request.skill
@@ -181,7 +181,7 @@ async def execute_task(request: TaskRequest):
                 demo_events = get_demo_events()
                 today = datetime.now().date()
                 
-                # Filter events for today
+                # 今日のイベントをフィルタ
                 today_events = [
                     e for e in demo_events
                     if datetime.fromisoformat(e['start']).date() == today
@@ -256,7 +256,7 @@ async def execute_task(request: TaskRequest):
                 error=str(e)
             )
     
-    # Real mode - use Calendar API
+    # 実モード - Calendar APIを使用
     if not calendar:
         return TaskResponse(
             status="error",
@@ -409,4 +409,3 @@ if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8002)
 
-# Made with Bob

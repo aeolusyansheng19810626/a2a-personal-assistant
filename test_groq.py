@@ -12,5 +12,3 @@ try:
     print('[OK] Groq client created successfully')
 except Exception as e:
     print(f'[ERROR] Error creating Groq client: {e}')
-
-# Made with Bob

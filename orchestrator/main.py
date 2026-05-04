@@ -8,10 +8,10 @@ from llm_client import GroqClient
 
 app = FastAPI(title="Orchestrator", version="1.0.0")
 
-# Agent registry
+# エージェントレジストリ
 agent_registry: Dict[str, Dict[str, Any]] = {}
 
-# Initialize Groq client
+# Groqクライアントを初期化
 try:
     llm_client = GroqClient()
 except Exception as e:
@@ -29,7 +29,7 @@ class QueryResponse(BaseModel):
     skill_used: Optional[str] = None
 
 def discover_agents():
-    """Discover all agents by calling their agent card endpoints"""
+    """エージェントカードエンドポイントを呼び出してすべてのエージェントを検出"""
     import time
     
     agent_ports = {
@@ -61,11 +61,11 @@ def discover_agents():
             except requests.exceptions.RequestException as e:
                 print(f"✗ Attempt {attempt + 1}/{max_retries}: Failed to discover {agent_name}: {e}")
             
-            # Wait before retry (except on last attempt)
+            # リトライ前に待機（最後の試行を除く）
             if attempt < max_retries - 1:
                 time.sleep(retry_delay)
         
-        # If all retries failed
+        # すべてのリトライが失敗した場合
         if agent_name not in discovered:
             print(f"✗ Failed to discover {agent_name} after {max_retries} attempts")
     
@@ -73,13 +73,13 @@ def discover_agents():
 
 @app.on_event("startup")
 async def startup_event():
-    """Discover agents on startup"""
+    """起動時にエージェントを検出"""
     import time
     import asyncio
     
     global agent_registry
     
-    # Wait a bit for other services to start
+    # 他のサービスの起動を少し待つ
     print("Waiting for other services to start...")
     await asyncio.sleep(3)
     
@@ -89,14 +89,14 @@ async def startup_event():
 
 @app.get("/.well-known/agent.json")
 async def get_agent_card():
-    """Return agent card for A2A discovery"""
+    """A2A検出用のエージェントカードを返す"""
     agent_card_path = Path(__file__).parent / "agent_card.json"
     with open(agent_card_path, "r", encoding="utf-8") as f:
         return json.load(f)
 
 @app.get("/health")
 async def health_check():
-    """Health check endpoint"""
+    """ヘルスチェックエンドポイント"""
     return {
         "status": "healthy",
         "agent": "orchestrator",
@@ -136,7 +136,7 @@ async def process_query(request: QueryRequest):
         params = intent.get("params", {})
         reasoning = intent.get("reasoning", "")
         
-        # Check if agent was identified
+        # エージェントが識別されたかチェック
         if agent_name == "none" or agent_name not in agent_registry:
             return QueryResponse(
                 status="error",
@@ -145,7 +145,7 @@ async def process_query(request: QueryRequest):
                 skill_used=None
             )
         
-        # Get agent endpoint
+        # エージェントエンドポイントを取得
         agent_card = agent_registry[agent_name]
         agent_endpoint = agent_card.get("endpoint")
         
@@ -155,7 +155,7 @@ async def process_query(request: QueryRequest):
                 error=f"Agent {agent_name} has no endpoint configured"
             )
         
-        # Call agent's /tasks endpoint
+        # エージェントの/tasksエンドポイントを呼び出し
         task_request = {
             "skill": skill_name,
             "params": params
@@ -208,7 +208,7 @@ async def process_query(request: QueryRequest):
 
 @app.post("/rediscover")
 async def rediscover_agents():
-    """Manually trigger agent rediscovery"""
+    """エージェントの再検出を手動でトリガー"""
     global agent_registry
     agent_registry = discover_agents()
     return {
@@ -221,4 +221,3 @@ if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
 
-# Made with Bob
