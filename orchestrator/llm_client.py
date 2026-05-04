@@ -4,10 +4,10 @@ from pathlib import Path
 from groq import Groq
 from dotenv import load_dotenv
 
-# Load .env from parent directory (project root)
+# 親ディレクトリ（プロジェクトルート）から.envを読み込み
 load_dotenv(Path(__file__).parent.parent / ".env")
 
-# Groq model tiers with fallback
+# フォールバック付きGroqモデル階層
 TIER_TOP = "openai/gpt-oss-120b"
 TIER_UPPER_MID = "openai/gpt-oss-20b"
 TIER_MID = "qwen/qwen3-32b"
@@ -22,9 +22,9 @@ class GroqClient:
         if not api_key:
             raise ValueError("GROQ_API_KEY not found in environment variables")
         
-        # Remove proxies parameter - not supported in current Groq version
+        # proxiesパラメータを削除 - 現在のGroqバージョンではサポートされていない
         self.client = Groq(api_key=api_key)
-        self.current_tier_index = 3  # Start with TIER_LOW for intent recognition
+        self.current_tier_index = 3  # インテント認識にはTIER_LOWから開始
     
     def chat_completion(self, messages: list, model: Optional[str] = None, 
                        temperature: float = 0.7, max_tokens: int = 1024) -> str:
@@ -47,7 +47,7 @@ class GroqClient:
             except Exception as e:
                 error_str = str(e)
                 
-                # Check for rate limit (429) error
+                # レート制限（429）エラーをチェック
                 if "429" in error_str or "rate_limit" in error_str.lower():
                     print(f"Rate limit hit on {model}, falling back to next tier...")
                     tier_index += 1
@@ -60,9 +60,9 @@ class GroqClient:
         
         raise Exception("Failed to get response from any model tier")
     
-    def _make_request(self, messages: list, model: str, 
+    def _make_request(self, messages: list, model: str,
                      temperature: float, max_tokens: int) -> str:
-        """Make actual API request"""
+        """実際のAPIリクエストを実行"""
         try:
             chat_completion = self.client.chat.completions.create(
                 messages=messages,
@@ -82,13 +82,13 @@ class GroqClient:
         """
         from datetime import datetime, timedelta
         
-        # Get current date/time for context
+        # コンテキスト用に現在の日時を取得
         now = datetime.now()
         today = now.strftime("%Y-%m-%d")
         tomorrow = (now + timedelta(days=1)).strftime("%Y-%m-%d")
         current_time = now.strftime("%H:%M")
         
-        # Format agent cards for prompt with detailed skill parameters
+        # 詳細なスキルパラメータを含むプロンプト用にエージェントカードをフォーマット
         agents_info = []
         for agent_name, card in agent_cards.items():
             agent_desc = f"- {agent_name}: {card.get('description', '')}\n  Skills:"
@@ -186,7 +186,7 @@ If the query doesn't match any agent, use:
         try:
             response = self.chat_completion(messages, temperature=0.3, max_tokens=512)
             
-            # Clean response (remove markdown code blocks if present)
+            # レスポンスをクリーンアップ（マークダウンコードブロックがあれば削除）
             response = response.strip()
             if response.startswith("```json"):
                 response = response[7:]
@@ -196,7 +196,7 @@ If the query doesn't match any agent, use:
                 response = response[:-3]
             response = response.strip()
             
-            # Parse JSON
+            # JSONをパース
             import json
             intent = json.loads(response)
             
@@ -211,4 +211,3 @@ If the query doesn't match any agent, use:
                 "reasoning": f"Error parsing intent: {str(e)}"
             }
 
-# Made with Bob

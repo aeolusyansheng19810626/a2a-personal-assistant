@@ -19,19 +19,19 @@ class TaskResponse(BaseModel):
 
 @app.get("/.well-known/agent.json")
 async def get_agent_card():
-    """Return agent card for A2A discovery"""
+    """A2A検出用のエージェントカードを返す"""
     agent_card_path = Path(__file__).parent / "agent_card.json"
     with open(agent_card_path, "r", encoding="utf-8") as f:
         return json.load(f)
 
 @app.get("/health")
 async def health_check():
-    """Health check endpoint"""
+    """ヘルスチェックエンドポイント"""
     return {"status": "healthy", "agent": "task_agent"}
 
 @app.post("/tasks", response_model=TaskResponse)
 async def execute_task(request: TaskRequest):
-    """Execute a task based on skill name"""
+    """スキル名に基づいてタスクを実行"""
     try:
         skill = request.skill
         params = request.params
@@ -62,7 +62,7 @@ async def execute_task(request: TaskRequest):
                     result="No tasks found"
                 )
             
-            # Format tasks for display
+            # 表示用にタスクをフォーマット
             task_list = []
             for task in tasks:
                 status_icon = "✓" if task["status"] == "completed" else "○"
@@ -139,4 +139,3 @@ if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8003)
 
-# Made with Bob

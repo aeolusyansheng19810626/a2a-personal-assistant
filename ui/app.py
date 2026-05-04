@@ -6,10 +6,10 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Load environment variables
+# 環境変数を読み込み
 load_dotenv(Path(__file__).parent.parent / ".env")
 
-# Page config
+# ページ設定
 st.set_page_config(
     page_title="A2A 个人助手",
     page_icon="🤖",
@@ -17,17 +17,17 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Orchestrator endpoint
+# オーケストレーターエンドポイント
 ORCHESTRATOR_URL = "http://localhost:8000"
 
-# Check DEMO_MODE
+# DEMO_MODEをチェック
 DEMO_MODE = os.getenv("DEMO_MODE", "false").lower() == "true"
 
-# 初始化语言状态
+# 言語状態の初期化
 if "lang" not in st.session_state:
-    st.session_state.lang = "zh"
+    st.session_state.lang = "en"
 
-# 多语言翻译
+# 多言語対応の翻訳定義
 i18n = {
     "zh": {
         "title": "A2A（Agent To Agent）个人助手",

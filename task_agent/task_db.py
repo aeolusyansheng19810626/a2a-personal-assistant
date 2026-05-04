@@ -8,7 +8,7 @@ class TaskDatabase:
         self.init_db()
     
     def init_db(self):
-        """Initialize database with tasks table"""
+        """タスクテーブルを持つデータベースを初期化"""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         cursor.execute("""
@@ -26,7 +26,7 @@ class TaskDatabase:
         conn.close()
     
     def create_task(self, title: str, description: str = "", priority: str = "Medium") -> Dict:
-        """Create a new task"""
+        """新しいタスクを作成"""
         if priority not in ['High', 'Medium', 'Low']:
             priority = 'Medium'
         
@@ -49,7 +49,7 @@ class TaskDatabase:
         }
     
     def list_tasks(self, status: Optional[str] = None, priority: Optional[str] = None) -> List[Dict]:
-        """List tasks with optional filters"""
+        """オプションのフィルタを使用してタスクを一覧表示"""
         conn = sqlite3.connect(self.db_path)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
@@ -74,7 +74,7 @@ class TaskDatabase:
         return [dict(row) for row in rows]
     
     def get_task(self, task_id: int) -> Optional[Dict]:
-        """Get a single task by ID"""
+        """IDで単一のタスクを取得"""
         conn = sqlite3.connect(self.db_path)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
@@ -85,7 +85,7 @@ class TaskDatabase:
         return dict(row) if row else None
     
     def complete_task(self, task_id: int) -> bool:
-        """Mark a task as completed"""
+        """タスクを完了としてマーク"""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         cursor.execute(
@@ -99,7 +99,7 @@ class TaskDatabase:
         return affected > 0
     
     def delete_task(self, task_id: int) -> bool:
-        """Delete a task"""
+        """タスクを削除"""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         cursor.execute("DELETE FROM tasks WHERE id = ?", (task_id,))
@@ -109,4 +109,3 @@ class TaskDatabase:
         
         return affected > 0
 
-# Made with Bob

@@ -22,14 +22,14 @@ class GmailClient:
         self.authenticate()
     
     def authenticate(self):
-        """Authenticate with Gmail API using OAuth2"""
+        """OAuth2を使用してGmail APIで認証"""
         creds = None
         
-        # Load existing token
+        # 既存のトークンを読み込み
         if os.path.exists(self.token_path):
             creds = Credentials.from_authorized_user_file(self.token_path, SCOPES)
         
-        # If no valid credentials, authenticate
+        # 有効な認証情報がない場合は認証を実行
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
@@ -46,7 +46,7 @@ class GmailClient:
         self.service = build('gmail', 'v1', credentials=creds)
     
     def list_emails(self, max_results: int = 10, query: str = "") -> List[Dict]:
-        """List emails from inbox"""
+        """受信トレイからメールを一覧表示"""
         try:
             results = self.service.users().messages().list(
                 userId='me',
@@ -71,7 +71,7 @@ class GmailClient:
             raise Exception(f"Gmail API error: {error}")
     
     def get_email(self, message_id: str) -> Optional[Dict]:
-        """Get a specific email by ID"""
+        """IDで特定のメールを取得"""
         try:
             message = self.service.users().messages().get(
                 userId='me',
@@ -108,7 +108,7 @@ class GmailClient:
             raise Exception(f"Gmail API error: {error}")
     
     def send_email(self, to: str, subject: str, body: str) -> Dict:
-        """Send an email"""
+        """メールを送信"""
         try:
             message = MIMEText(body)
             message['to'] = to
@@ -131,7 +131,5 @@ class GmailClient:
             raise Exception(f"Gmail API error: {error}")
     
     def search_emails(self, query: str, max_results: int = 10) -> List[Dict]:
-        """Search emails with a query"""
+        """クエリでメールを検索"""
         return self.list_emails(max_results=max_results, query=query)
-
-# Made with Bob
