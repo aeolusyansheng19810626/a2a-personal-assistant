@@ -796,6 +796,38 @@ def send_query(query: str):
             "error": f"Connection error: {str(e)}"
         }
 
+def format_travel_result(result: dict) -> str:
+    lines = []
+    dest = result.get("destination", "")
+    days = result.get("days", "")
+    if dest:
+        lines.append(f"## {dest} — {days}-Day Travel Plan\n")
+
+    weather = result.get("weather", {})
+    if weather:
+        lines.append("### Weather Forecast")
+        for day in weather.get("forecast", []):
+            lines.append(
+                f"- **{day['date']}**: {day['weather']}, "
+                f"{day['temperature_min']}°C – {day['temperature_max']}°C"
+            )
+        lines.append("")
+
+    itinerary = result.get("itinerary", {})
+    if itinerary and itinerary.get("itinerary_text"):
+        lines.append("### Itinerary")
+        lines.append(itinerary["itinerary_text"])
+        lines.append("")
+
+    attractions = result.get("attractions", [])
+    if attractions:
+        lines.append("### Top Attractions")
+        for a in attractions[:5]:
+            lines.append(f"- **{a['name']}**: {a['description']}")
+
+    return "\n".join(lines) if lines else str(result)
+
+
 # Initialize session state
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -947,8 +979,10 @@ if "example_query" in st.session_state:
         with st.spinner("处理中..."):
             response = send_query(query)
 
-            if response.get("status") == "ok":
+            if response.get("status") in ("ok", "success"):
                 result = response.get("result", "无结果")
+                if isinstance(result, dict):
+                    result = format_travel_result(result)
                 st.markdown(result)
 
                 # Store message with metadata
@@ -968,7 +1002,8 @@ if "example_query" in st.session_state:
                         f"技能：`{response['skill_used']}`"
                     )
             else:
-                error_msg = f"❌ 错误：{response.get('error', '未知错误')}"
+                err = response.get('error') or '未知错误'
+                error_msg = f"❌ 错误：{err}"
                 st.error(error_msg)
 
                 st.session_state.messages.append({
@@ -996,8 +1031,10 @@ if prompt := st.chat_input(t("chat_input_placeholder")):
             with st.spinner("处理中..."):
                 response = send_query(prompt)
 
-                if response.get("status") == "ok":
+                if response.get("status") in ("ok", "success"):
                     result = response.get("result", "无结果")
+                    if isinstance(result, dict):
+                        result = format_travel_result(result)
                     st.markdown(result)
 
                     # Store message with metadata
@@ -1017,7 +1054,8 @@ if prompt := st.chat_input(t("chat_input_placeholder")):
                             f"技能：`{response['skill_used']}`"
                         )
                 else:
-                    error_msg = f"❌ 错误：{response.get('error', '未知错误')}"
+                    err = response.get('error') or '未知错误'
+                    error_msg = f"❌ 错误：{err}"
                     st.error(error_msg)
 
                     st.session_state.messages.append({
